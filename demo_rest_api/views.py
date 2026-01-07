@@ -39,4 +39,48 @@ class DemoRestApi(APIView):
       return Response({'message': 'Dato guardado exitosamente.', 'data': data}, status=status.HTTP_201_CREATED)
 
 
+    def put(self, request):
+      data = request.data
+
+      if 'id' not in data:
+        return Response({'error': 'Debe especificar al menos el ID'}, status=status.HTTP_400_BAD_REQUEST)
+
+      for i in data_list:
+        if i.get('id') == data.get('id'):
+          i['name'] = data.get('name', '')
+          i['email'] = data.get('email', '')
+          i['is_active'] = data.get('is_active', True)
+          return Response({'message': 'Dato actualizado exitosamente.', 'data': data}, status=status.HTTP_200_OK)
+        
+      return Response({'mesage': 'ID no encontrado', 'data': data}, status=status.HTTP_400_BAD_REQUEST)
+
+    def patch(self, request):
+      data = request.data
+
+      if 'id' not in data:
+        return Response({'error': 'Debe especificar al menos el ID'}, status=status.HTTP_400_BAD_REQUEST)
+
+      for i in data_list:
+        if i.get('id') == data.get('id'):
+          i['name'] = data.get('name', i['name'])
+          i['email'] = data.get('email', i['email'])
+          i['is_active'] = data.get('is_active', i['is_active'])
+          return Response({'message': 'Dato cambiado exitosamente.', 'data': data}, status=status.HTTP_200_OK)
+
+      return Response({'message': 'ID no encontrado', 'data': data}, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request):
+      data = request.data
+
+      if 'id' not in data:
+        return Response({'error': 'Debe agregar el campo ID'}, status=status.HTTP_400_BAD_REQUEST)
+
+      for i in data_list:
+        if i.get('id') == data.get('id'):            
+          data_list.remove(i)
+      
+      return Response({'message': 'Dato eliminado exitosamente', 'data': data}, status=status.HTTP_200_OK)
+            
+
+
     
