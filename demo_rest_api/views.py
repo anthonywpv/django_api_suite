@@ -57,9 +57,9 @@ class DemoRestApiItem(APIView):
 
       for i in data_list:
         if i.get('id') == id:
-          i['name'] = data.get('name', '')
-          i['email'] = data.get('email', '')
-          i['is_active'] = data.get('is_active', True)
+          i['name'] = data.get('name', ) # Vacío para que por defecto sea null.
+          i['email'] = data.get('email', )
+          i['is_active'] = data.get('is_active', i['is_active'])
           return Response({'message': 'Dato actualizado exitosamente.', 'data': data}, status=status.HTTP_200_OK)
         
       return Response({'mesage': 'ID no encontrado', 'data': data}, status=status.HTTP_400_BAD_REQUEST)
@@ -70,7 +70,7 @@ class DemoRestApiItem(APIView):
 
       for i in data_list:
         if i.get('id') == id:
-          i['name'] = data.get('name', i['name'])
+          i['name'] = data.get('name', i['name']) # Por defecto es el valor que ya se tenía.
           i['email'] = data.get('email', i['email'])
           i['is_active'] = data.get('is_active', i['is_active'])
           return Response({'message': 'Dato cambiado exitosamente.', 'data': data}, status=status.HTTP_200_OK)
@@ -83,6 +83,6 @@ class DemoRestApiItem(APIView):
 
       for i in data_list:
         if i.get('id') == id:            
-          data_list.remove(i)
+          i['is_active'] = False
       
-      return Response({'message': 'Dato eliminado exitosamente', 'data': data}, status=status.HTTP_200_OK)
+      return Response({'message': 'El dato ha sido desactivado', 'data': data}, status=status.HTTP_200_OK)
